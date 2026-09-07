@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Dark Canvas Background with rounded aesthetic -->
+    <path
+        android:pathData="M0,0h108v108h-108z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54"
+                android:startY="0"
+                android:endX="54"
+                android:endY="108"
+                android:type="linear">
+                <item android:color="#0B0E14" android:offset="0.0" />
+                <item android:color="#101520" android:offset="0.4" />
+                <item android:color="#0D111A" android:offset="0.7" />
+                <item android:color="#07090E" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Subtle Center Glow -->
+    <path
+        android:pathData="M14,52 a40,16 0 1,0 80,0 a40,16 0 1,0 -80,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54"
+                android:startY="36"
+                android:endX="54"
+                android:endY="68"
+                android:type="linear">
+                <item android:color="#1E293B" android:offset="0.0" />
+                <item android:color="#00101520" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- 1. Top Badge Pill: "1:64" -->
+    <path
+        android:pathData="M38,20 h32 a4.5,4.5 0 0,1 4.5,4.5 a4.5,4.5 0 0,1 -4.5,4.5 h-32 a4.5,4.5 0 0,1 -4.5,-4.5 a4.5,4.5 0 0,1 4.5,-4.5 z"
+        android:strokeWidth="0.8"
+        android:strokeColor="#4A6585">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54"
+                android:startY="20"
+                android:endX="54"
+                android:endY="29"
+                android:type="linear">
+                <item android:color="#2C3D52" android:offset="0.0" />
+                <item android:color="#1A2636" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Top Badge Text "1:64" -->
+    <path
+        android:fillColor="#E2E8F0"
+        android:pathData="M44.5,23.2 h2 v5.2 h-1.1 v-4.1 h-0.9 z" />
+    <path
+        android:fillColor="#E2E8F0"
+        android:pathData="M49.5,24.5 h1.1 v1.1 h-1.1 z M49.5,26.8 h1.1 v1.1 h-1.1 z" />
+    <path
+        android:fillColor="#E2E8F0"
+        android:pathData="M54.5,23.2 h2.6 v1 h-1.6 v1.2 c0.3,-0.2 0.7,-0.3 1.1,-0.3 c1,0 1.6,0.7 1.6,1.7 c0,1 -0.7,1.7 -1.7,1.7 c-1.1,0 -1.9,-0.8 -1.9,-2.4 z M55.5,26.2 c0,0.6 0.4,1 0.9,1 c0.5,0 0.9,-0.4 0.9,-1 c0,-0.6 -0.4,-1 -0.9,-1 c-0.5,0 -0.9,0.4 -0.9,1 z" />
+    <path
+        android:fillColor="#E2E8F0"
+        android:pathData="M61.8,23.2 v3.3 h-2.4 v-3.3 h1.1 v2.2 h1.3 v-2.2 z M61.8,26.5 v1.9 h-1.1 v-1.9 z" />
+
+    <!-- 2. Speed / Motion trails -->
+    <path
+        android:pathData="M14,40 h7 M10,45 h10 M15,50 h6"
+        android:strokeColor="#38495E"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round" />
+
+    <!-- 3. Rear Spoiler Wing -->
+    <path
+        android:pathData="M20,38.5 l7.5,-2.2 l-0.6,2.8 l-7.5,2.2 z"
+        android:fillColor="#CBD5E1" />
+
+    <!-- 4. Front Headlight Beam glow -->
+    <path
+        android:pathData="M83.5,46 l12,-3.5 v6.5 l-12,0.5 z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="83.5"
+                android:startY="46"
+                android:endX="95.5"
+                android:endY="46"
+                android:type="linear">
+                <item android:color="#4038BDF8" android:offset="0.0" />
+                <item android:color="#0038BDF8" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- 5. Ground shadow -->
+    <path
+        android:pathData="M22,54 a32,2.5 0 1,0 64,0 a32,2.5 0 1,0 -64,0"
+        android:fillColor="#50000000" />
+
+    <!-- 6. Aerodynamic Diecast Car Body -->
+    <path
+        android:pathData="M22,46.5 C21,43.5 25.5,41 30.5,40.5 C34.5,35 43,29.5 53.5,29.5 C64.5,29.5 73,33.5 80.5,42 C83.5,43.5 84.5,45.5 84.5,47 C84.5,49.5 82.5,50.5 79.5,50.5 C79,47.5 76,45 72,45 C68,45 65,47.5 64.5,50.5 L44.5,50.5 C44,47.5 41,45 37,45 C33,45 30,47.5 29.5,50.5 C25.5,50.5 22,49.5 22,46.5 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54"
+                android:startY="29"
+                android:endX="54"
+                android:endY="51"
+                android:type="linear">
+                <item android:color="#FFFFFF" android:offset="0.0" />
+                <item android:color="#E2E8F0" android:offset="0.3" />
+                <item android:color="#CBD5E1" android:offset="0.7" />
+                <item android:color="#94A3B8" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <path
+        android:pathData="M22,46.5 C21,43.5 25.5,41 30.5,40.5 C34.5,35 43,29.5 53.5,29.5 C64.5,29.5 73,33.5 80.5,42 C83.5,43.5 84.5,45.5 84.5,47"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="0.8" />
+
+    <!-- 7. Cockpit Window -->
+    <path
+        android:pathData="M40.5,36.5 C45.5,31.5 55.5,31 66.5,36.5 C63.5,39.5 55.5,40.5 44.5,40.5 C41.5,40.5 40.5,38.5 40.5,36.5 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="53"
+                android:startY="31"
+                android:endX="53"
+                android:endY="41"
+                android:type="linear">
+                <item android:color="#7DD3FC" android:offset="0.0" />
+                <item android:color="#38BDF8" android:offset="0.5" />
+                <item android:color="#0284C7" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- 8. Rear Wheel -->
+    <path
+        android:pathData="M37,50.5 m-5.5,0 a5.5,5.5 0 1,0 11,0 a5.5,5.5 0 1,0 -11,0"
+        android:fillColor="#0F172A"
+        android:strokeColor="#475569"
+        android:strokeWidth="0.7" />
+    <path
+        android:pathData="M37,50.5 m-3.8,0 a3.8,3.8 0 1,0 7.6,0 a3.8,3.8 0 1,0 -7.6,0"
+        android:fillColor="#E2E8F0" />
+    <path
+        android:pathData="M37,50.5 m-2.8,0 a2.8,2.8 0 1,0 5.6,0 a2.8,2.8 0 1,0 -5.6,0"
+        android:fillColor="#1E293B" />
+    <path
+        android:pathData="M37,50.5 m-1.2,0 a1.2,1.2 0 1,0 2.4,0 a1.2,1.2 0 1,0 -2.4,0"
+        android:fillColor="#CBD5E1" />
+    <path
+        android:pathData="M37,47.8 v5.4 M34.3,50.5 h5.4 M35.1,48.6 l3.8,3.8 M35.1,52.4 l3.8,-3.8"
+        android:strokeColor="#CBD5E1"
+        android:strokeWidth="0.5" />
+
+    <!-- 9. Front Wheel -->
+    <path
+        android:pathData="M72,50.5 m-5.5,0 a5.5,5.5 0 1,0 11,0 a5.5,5.5 0 1,0 -11,0"
+        android:fillColor="#0F172A"
+        android:strokeColor="#475569"
+        android:strokeWidth="0.7" />
+    <path
+        android:pathData="M72,50.5 m-3.8,0 a3.8,3.8 0 1,0 7.6,0 a3.8,3.8 0 1,0 -7.6,0"
+        android:fillColor="#E2E8F0" />
+    <path
+        android:pathData="M72,50.5 m-2.8,0 a2.8,2.8 0 1,0 5.6,0 a2.8,2.8 0 1,0 -5.6,0"
+        android:fillColor="#1E293B" />
+    <path
+        android:pathData="M72,50.5 m-1.2,0 a1.2,1.2 0 1,0 2.4,0 a1.2,1.2 0 1,0 -2.4,0"
+        android:fillColor="#CBD5E1" />
+    <path
+        android:pathData="M72,47.8 v5.4 M69.3,50.5 h5.4 M70.1,48.6 l3.8,3.8 M70.1,52.4 l3.8,-3.8"
+        android:strokeColor="#CBD5E1"
+        android:strokeWidth="0.5" />
+
+    <!-- 10. EST. 2026 -->
+    <path
+        android:pathData="M26,61 h13 M69,61 h13"
+        android:strokeColor="#475569"
+        android:strokeWidth="0.6" />
+    <path
+        android:fillColor="#94A3B8"
+        android:pathData="
+        M42,59.8 h2.4 v0.7 h-1.6 v0.6 h1.3 v0.7 h-1.3 v0.7 h1.7 v0.7 h-2.5 z
+        M45.5,61.8 c0.3,0.3 0.7,0.5 1.1,0.5 c0.5,0 0.8,-0.2 0.8,-0.5 c0,-0.4 -0.4,-0.5 -0.9,-0.6 c-0.8,-0.2 -1.2,-0.5 -1.2,-1.1 c0,-0.7 0.6,-1.2 1.4,-1.2 c0.5,0 0.9,0.2 1.2,0.4 l-0.4,0.6 c-0.2,-0.2 -0.5,-0.4 -0.8,-0.4 c-0.4,0 -0.6,0.2 -0.6,0.5 c0,0.3 0.3,0.4 0.8,0.6 c0.8,0.2 1.3,0.5 1.3,1.1 c0,0.8 -0.6,1.2 -1.5,1.2 c-0.6,0 -1.1,-0.2 -1.4,-0.5 z
+        M48.8,59.8 h2.8 v0.7 h-1 v2.7 h-0.8 v-2.7 h-1 z
+        M52.3,62.5 h0.8 v0.8 h-0.8 z
+        M54.5,60.6 c0.3,-0.5 0.7,-0.8 1.3,-0.8 c0.8,0 1.3,0.5 1.3,1.1 c0,0.6 -0.4,1 -1,1.5 l-0.8,0.6 h1.9 v0.7 h-2.9 v-0.6 l1.4,-1.2 c0.4,-0.3 0.6,-0.6 0.6,-0.9 c0,-0.4 -0.3,-0.6 -0.6,-0.6 c-0.4,0 -0.7,0.2 -0.9,0.5 z
+        M58,60.8 c0,-0.7 0.6,-1 1.2,-1 c0.7,0 1.2,0.4 1.2,1.2 v1.3 c0,0.8 -0.5,1.2 -1.2,1.2 c-0.7,0 -1.2,-0.4 -1.2,-1.2 z M58.8,62.1 c0,0.4 0.2,0.6 0.4,0.6 c0.3,0 0.4,-0.2 0.4,-0.6 v-1.3 c0,-0.4 -0.2,-0.6 -0.4,-0.6 c-0.3,0 -0.4,0.2 -0.4,0.6 z
+        M61.2,60.6 c0.3,-0.5 0.7,-0.8 1.3,-0.8 c0.8,0 1.3,0.5 1.3,1.1 c0,0.6 -0.4,1 -1,1.5 l-0.8,0.6 h1.9 v0.7 h-2.9 v-0.6 l1.4,-1.2 c0.4,-0.3 0.6,-0.6 0.6,-0.9 c0,-0.4 -0.3,-0.6 -0.6,-0.6 c-0.4,0 -0.7,0.2 -0.9,0.5 z
+        M64.6,60.8 c0,-0.7 0.6,-1 1.2,-1 c0.7,0 1.2,0.4 1.2,1.2 v0.5 c0,0.5 -0.3,0.8 -0.7,0.9 c0.5,0.1 0.8,0.5 0.8,1 c0,0.8 -0.6,1.2 -1.3,1.2 c-0.8,0 -1.3,-0.5 -1.3,-1.2 z M65.4,62.5 c0,0.4 0.2,0.6 0.5,0.6 c0.3,0 0.5,-0.2 0.5,-0.6 c0,-0.4 -0.2,-0.6 -0.5,-0.6 c-0.3,0 -0.5,0.2 -0.5,0.6 z M65.4,60.8 c0,0.3 0.2,0.5 0.4,0.5 c0.3,0 0.4,-0.2 0.4,-0.5 c0,-0.3 -0.2,-0.5 -0.4,-0.5 c-0.3,0 -0.4,0.2 -0.4,0.5 z" />
+
+    <!-- 11. "DIECAST VAULT" Title -->
+    <path
+        android:fillColor="#F8FAFC"
+        android:pathData="
+        M18.5,67 h2.6 c1.8,0 2.9,1.1 2.9,2.7 c0,1.6 -1.1,2.7 -2.9,2.7 h-2.6 z M19.9,68.2 v3.8 h1.1 c1.1,0 1.7,-0.7 1.7,-1.9 c0,-1.2 -0.6,-1.9 -1.7,-1.9 z
+        M25.5,67 h1.4 v5.4 h-1.4 z
+        M28.5,67 h3.8 v1.2 h-2.4 v0.9 h2.1 v1.2 h-2.1 v0.9 h2.5 v1.2 h-3.9 z
+        M33.5,69.7 c0,-1.6 1.2,-2.8 2.8,-2.8 c1.1,0 1.9,0.5 2.4,1.3 l-1.1,0.8 c-0.3,-0.5 -0.7,-0.8 -1.3,-0.8 c-0.9,0 -1.5,0.7 -1.5,1.5 c0,0.8 0.6,1.5 1.5,1.5 c0.6,0 1,-0.3 1.3,-0.8 l1.1,0.8 c-0.5,0.8 -1.3,1.3 -2.4,1.3 c-1.6,0 -2.8,-1.2 -2.8,-2.8 z
+        M39.8,72.4 l2.1,-5.4 h1.5 l2.1,5.4 h-1.4 l-0.4,-1.2 h-2.1 l-0.4,1.2 z M42,70 h1.5 l-0.7,-2.1 z
+        M46.5,71.3 c0.5,0.5 1.2,0.8 1.9,0.8 c0.8,0 1.3,-0.4 1.3,-0.9 c0,-0.6 -0.6,-0.8 -1.4,-1 c-1.3,-0.3 -2,-0.8 -2,-1.8 c0,-1.1 0.9,-1.9 2.2,-1.9 c0.8,0 1.5,0.3 2,0.7 l-0.7,1 c-0.4,-0.3 -0.8,-0.5 -1.3,-0.5 c-0.6,0 -0.9,0.3 -0.9,0.7 c0,0.5 0.5,0.7 1.3,0.9 c1.3,0.3 2.1,0.8 2.1,1.9 c0,1.2 -1,2 -2.4,2 c-0.9,0 -1.8,-0.4 -2.3,-0.9 z
+        M52.8,67 h4.6 v1.2 h-1.6 v4.2 h-1.4 v-4.2 h-1.6 z
+        M61,67 l1.6,5.4 h1.4 l1.6,-5.4 h-1.4 l-0.9,3.6 l-0.9,-3.6 z
+        M66.5,72.4 l2.1,-5.4 h1.5 l2.1,5.4 h-1.4 l-0.4,-1.2 h-2.1 l-0.4,1.2 z M68.7,70 h1.5 l-0.7,-2.1 z
+        M73.5,67 h1.4 v3.3 c0,1 0.5,1.5 1.4,1.5 c0.9,0 1.4,-0.5 1.4,-1.5 v-3.3 h1.4 v3.3 c0,1.8 -1,2.8 -2.8,2.8 c-1.8,0 -2.8,-1 -2.8,-2.8 z
+        M80.5,67 h1.4 v4.2 h2.6 v1.2 h-4 z
+        M85.8,67 h4.6 v1.2 h-1.6 v4.2 h-1.4 v-4.2 h-1.6 z" />
+
+    <!-- 12. "1:64 COLLECTORS CLUB" -->
+    <path
+        android:fillColor="#94A3B8"
+        android:pathData="
+        M25,75.5 h1.2 v3 h-0.7 v-2.4 h-0.5 z
+        M27.2,76.3 h0.6 v0.6 h-0.6 z M27.2,77.6 h0.6 v0.6 h-0.6 z
+        M28.8,75.5 h1.5 v0.6 h-0.9 v0.7 c0.2,-0.1 0.4,-0.2 0.6,-0.2 c0.6,0 1,0.4 1,1 c0,0.6 -0.4,1 -1,1 c-0.7,0 -1.1,-0.5 -1.1,-1.5 z M29.4,77.3 c0,0.3 0.2,0.5 0.5,0.5 c0.3,0 0.5,-0.2 0.5,-0.5 c0,-0.3 -0.2,-0.5 -0.5,-0.5 c-0.3,0 -0.5,0.2 -0.5,0.5 z
+        M32.8,75.5 v1.9 h-1.4 v-1.9 h0.6 v1.3 h0.8 v-1.3 z M32.8,77.4 v1.1 h-0.6 v-1.1 z
+        M36.5,77 c0,-0.9 0.7,-1.6 1.6,-1.6 c0.6,0 1.1,0.3 1.3,0.7 l-0.6,0.4 c-0.2,-0.3 -0.4,-0.5 -0.7,-0.5 c-0.5,0 -0.9,0.4 -0.9,0.9 c0,0.5 0.4,0.9 0.9,0.9 c0.3,0 0.6,-0.2 0.7,-0.5 l0.6,0.4 c-0.3,0.4 -0.8,0.7 -1.3,0.7 c-0.9,0 -1.6,-0.7 -1.6,-1.6 z
+        M40.5,77 c0,-0.9 0.7,-1.6 1.6,-1.6 c0.9,0 1.6,0.7 1.6,1.6 c0,0.9 -0.7,1.6 -1.6,1.6 c-0.9,0 -1.6,-0.7 -1.6,-1.6 z M41.2,77 c0,0.5 0.4,0.9 0.9,0.9 c0.5,0 0.9,-0.4 0.9,-0.9 c0,-0.5 -0.4,-0.9 -0.9,-0.9 c-0.5,0 -0.9,0.4 -0.9,0.9 z
+        M44.8,75.5 h0.7 v2.4 h1.4 v0.6 h-2.1 z
+        M47.8,75.5 h0.7 v2.4 h1.4 v0.6 h-2.1 z
+        M50.8,75.5 h2.1 v0.6 h-1.4 v0.6 h1.2 v0.6 h-1.2 v0.6 h1.4 v0.6 h-2.1 z
+        M54,77 c0,-0.9 0.7,-1.6 1.6,-1.6 c0.6,0 1.1,0.3 1.3,0.7 l-0.6,0.4 c-0.2,-0.3 -0.4,-0.5 -0.7,-0.5 c-0.5,0 -0.9,0.4 -0.9,0.9 c0,0.5 0.4,0.9 0.9,0.9 c0.3,0 0.6,-0.2 0.7,-0.5 l0.6,0.4 c-0.3,0.4 -0.8,0.7 -1.3,0.7 c-0.9,0 -1.6,-0.7 -1.6,-1.6 z
+        M58,75.5 h2.5 v0.6 h-0.9 v2.4 h-0.7 v-2.4 h-0.9 z
+        M61.5,77 c0,-0.9 0.7,-1.6 1.6,-1.6 c0.9,0 1.6,0.7 1.6,1.6 c0,0.9 -0.7,1.6 -1.6,1.6 c-0.9,0 -1.6,-0.7 -1.6,-1.6 z M62.2,77 c0,0.5 0.4,0.9 0.9,0.9 c0.5,0 0.9,-0.4 0.9,-0.9 c0,-0.5 -0.4,-0.9 -0.9,-0.9 c-0.5,0 -0.9,0.4 -0.9,0.9 z
+        M65.8,75.5 h1.5 c0.8,0 1.3,0.4 1.3,1.1 c0,0.5 -0.3,0.8 -0.8,1 l0.9,0.9 h-0.9 l-0.8,-0.9 h-0.5 v0.9 h-0.7 z M66.5,76.9 h0.7 c0.4,0 0.7,-0.2 0.7,-0.5 c0,-0.3 -0.3,-0.5 -0.7,-0.5 h-0.7 z
+        M69.8,77.9 c0.3,0.3 0.7,0.4 1.1,0.4 c0.5,0 0.7,-0.2 0.7,-0.5 c0,-0.3 -0.3,-0.4 -0.8,-0.5 c-0.7,-0.2 -1.1,-0.5 -1.1,-1 c0,-0.6 0.5,-1.1 1.2,-1.1 c0.5,0 0.8,0.2 1.1,0.4 l-0.4,0.5 c-0.2,-0.2 -0.5,-0.3 -0.7,-0.3 c-0.3,0 -0.5,0.2 -0.5,0.4 c0,0.3 0.3,0.4 0.7,0.5 c0.7,0.2 1.2,0.4 1.2,1 c0,0.7 -0.6,1.1 -1.3,1.1 c-0.5,0 -1,-0.2 -1.3,-0.5 z
+        M74.8,77 c0,-0.9 0.7,-1.6 1.6,-1.6 c0.6,0 1.1,0.3 1.3,0.7 l-0.6,0.4 c-0.2,-0.3 -0.4,-0.5 -0.7,-0.5 c-0.5,0 -0.9,0.4 -0.9,0.9 c0,0.5 0.4,0.9 0.9,0.9 c0.3,0 0.6,-0.2 0.7,-0.5 l0.6,0.4 c-0.3,0.4 -0.8,0.7 -1.3,0.7 c-0.9,0 -1.6,-0.7 -1.6,-1.6 z
+        M78.8,75.5 h0.7 v2.4 h1.4 v0.6 h-2.1 z
+        M81.8,75.5 h0.7 v1.9 c0,0.6 0.3,0.9 0.8,0.9 c0.5,0 0.8,-0.3 0.8,-0.9 v-1.9 h0.7 v1.9 c0,1 -0.6,1.5 -1.5,1.5 c-1,0 -1.5,-0.6 -1.5,-1.5 z
+        M85.8,75.5 h1.5 c0.6,0 1,0.3 1,0.8 c0,0.3 -0.2,0.6 -0.5,0.7 c0.4,0.1 0.6,0.4 0.6,0.8 c0,0.5 -0.4,0.8 -1.1,0.8 h-1.5 z M86.5,76.6 h0.7 c0.3,0 0.4,-0.1 0.4,-0.3 c0,-0.2 -0.1,-0.3 -0.4,-0.3 h-0.7 z M86.5,78 h0.8 c0.3,0 0.5,-0.1 0.5,-0.3 c0,-0.2 -0.2,-0.3 -0.5,-0.3 h-0.8 z" />
+
+    <!-- 13. Bottom Decorative Star & Dots -->
+    <path
+        android:fillColor="#475569"
+        android:pathData="M43,83.5 a0.75,0.75 0 1,0 1.5,0 a0.75,0.75 0 1,0 -1.5,0" />
+    <path
+        android:fillColor="#64748B"
+        android:pathData="M48,83.5 a0.75,0.75 0 1,0 1.5,0 a0.75,0.75 0 1,0 -1.5,0" />
+    <path
+        android:fillColor="#CBD5E1"
+        android:pathData="M54,81.5 l0.8,1.6 l1.8,0.3 l-1.3,1.3 l0.3,1.8 l-1.6,-0.8 l-1.6,0.8 l0.3,-1.8 l-1.3,-1.3 l1.8,-0.3 z" />
+    <path
+        android:fillColor="#64748B"
+        android:pathData="M58.5,83.5 a0.75,0.75 0 1,0 1.5,0 a0.75,0.75 0 1,0 -1.5,0" />
+    <path
+        android:fillColor="#475569"
+        android:pathData="M63.5,83.5 a0.75,0.75 0 1,0 1.5,0 a0.75,0.75 0 1,0 -1.5,0" />
+
+</vector>

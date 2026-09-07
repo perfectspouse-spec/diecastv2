@@ -1,0 +1,6 @@
+{
+  "name": "Diecast Collection",
+  "description": "Diecast araba koleksiyonunuzu takip edin, yönetin ve envanter istatistiklerini görün.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

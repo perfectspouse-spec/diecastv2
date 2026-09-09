@@ -15,6 +15,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -177,14 +181,19 @@ fun StatsView(
         )
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
-            .testTag("stats_view")
+    Box(
+        modifier = modifier.fillMaxWidth(),
+        contentAlignment = Alignment.TopCenter
     ) {
-        Text(
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .widthIn(max = 1100.dp)
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+                .testTag("stats_view")
+        ) {
+            Text(
             text = if (isTr) "Koleksiyon İstatistikleri" else "Collection Statistics",
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
@@ -590,75 +599,155 @@ fun StatsView(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 1. Üretici Marka Dağılımı (Tire Pie Chart)
-        TirePieChartCard(
-            title = if (isTr) "Üretici Marka Dağılımı" else "Manufacturer Distribution",
-            subtitle = if (isTr) "Hot Wheels, Mini GT, Majorette vb. döküm üreticileri" else "Diecast manufacturers (Hot Wheels, Mini GT, etc.)",
-            items = manufacturerCounts,
-            totalCount = totalCount,
-            isTr = isTr,
-            onItemClick = { name ->
-                selectCategory(
-                    if (isTr) "Üretici Marka Dağılımı" else "Manufacturer Distribution",
-                    name,
-                    manufacturerCounts
-                )
+        // 4 Dağılım Grafiği (Responsive Grid: Tablet & Geniş ekranlarda 2x2 ızgara, dar telefon ekranlarında alt alta)
+        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+            val isWideCharts = maxWidth >= 680.dp
+            if (isWideCharts) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        TirePieChartCard(
+                            title = if (isTr) "Üretici Marka Dağılımı" else "Manufacturer Distribution",
+                            subtitle = if (isTr) "Hot Wheels, Mini GT, Majorette vb. döküm üreticileri" else "Diecast manufacturers (Hot Wheels, Mini GT, etc.)",
+                            items = manufacturerCounts,
+                            totalCount = totalCount,
+                            isTr = isTr,
+                            onItemClick = { name ->
+                                selectCategory(
+                                    if (isTr) "Üretici Marka Dağılımı" else "Manufacturer Distribution",
+                                    name,
+                                    manufacturerCounts
+                                )
+                            },
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        TirePieChartCard(
+                            title = if (isTr) "Araba Markası Dağılımı" else "Car Brand Breakdown",
+                            subtitle = if (isTr) "Porsche, Nissan, Ford, BMW gibi otomotiv markaları" else "Automotive brands like Porsche, Nissan, Ford, BMW",
+                            items = carBrandCounts,
+                            totalCount = totalCount,
+                            isTr = isTr,
+                            onItemClick = { name ->
+                                selectCategory(
+                                    if (isTr) "Araba Markası Dağılımı" else "Car Brand Breakdown",
+                                    name,
+                                    carBrandCounts
+                                )
+                            },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        TirePieChartCard(
+                            title = if (isTr) "Ölçek Dağılımı" else "Scale Breakdown",
+                            subtitle = if (isTr) "1:64, 1:43, 1:24 ve 1:18 model boyut oranları" else "Model scale ratios (1:64, 1:43, 1:24, 1:18)",
+                            items = scaleCounts,
+                            totalCount = totalCount,
+                            isTr = isTr,
+                            onItemClick = { name ->
+                                selectCategory(
+                                    if (isTr) "Ölçek Dağılımı" else "Scale Breakdown",
+                                    name,
+                                    scaleCounts
+                                )
+                            },
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        TirePieChartCard(
+                            title = if (isTr) "Paket & Hasar Durumu" else "Condition & Packaging",
+                            subtitle = if (isTr) "Kutulu, sergilenen açık veya hasarlı modeller" else "Boxed, displayed loose, or damaged models",
+                            items = conditionCounts,
+                            totalCount = totalCount,
+                            isTr = isTr,
+                            onItemClick = { name ->
+                                selectCategory(
+                                    if (isTr) "Paket & Hasar Durumu" else "Condition & Packaging",
+                                    name,
+                                    conditionCounts
+                                )
+                            },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+            } else {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    TirePieChartCard(
+                        title = if (isTr) "Üretici Marka Dağılımı" else "Manufacturer Distribution",
+                        subtitle = if (isTr) "Hot Wheels, Mini GT, Majorette vb. döküm üreticileri" else "Diecast manufacturers (Hot Wheels, Mini GT, etc.)",
+                        items = manufacturerCounts,
+                        totalCount = totalCount,
+                        isTr = isTr,
+                        onItemClick = { name ->
+                            selectCategory(
+                                if (isTr) "Üretici Marka Dağılımı" else "Manufacturer Distribution",
+                                name,
+                                manufacturerCounts
+                            )
+                        }
+                    )
+
+                    TirePieChartCard(
+                        title = if (isTr) "Araba Markası Dağılımı" else "Car Brand Breakdown",
+                        subtitle = if (isTr) "Porsche, Nissan, Ford, BMW gibi otomotiv markaları" else "Automotive brands like Porsche, Nissan, Ford, BMW",
+                        items = carBrandCounts,
+                        totalCount = totalCount,
+                        isTr = isTr,
+                        onItemClick = { name ->
+                            selectCategory(
+                                if (isTr) "Araba Markası Dağılımı" else "Car Brand Breakdown",
+                                name,
+                                carBrandCounts
+                            )
+                        }
+                    )
+
+                    TirePieChartCard(
+                        title = if (isTr) "Ölçek Dağılımı" else "Scale Breakdown",
+                        subtitle = if (isTr) "1:64, 1:43, 1:24 ve 1:18 model boyut oranları" else "Model scale ratios (1:64, 1:43, 1:24, 1:18)",
+                        items = scaleCounts,
+                        totalCount = totalCount,
+                        isTr = isTr,
+                        onItemClick = { name ->
+                            selectCategory(
+                                if (isTr) "Ölçek Dağılımı" else "Scale Breakdown",
+                                name,
+                                scaleCounts
+                            )
+                        }
+                    )
+
+                    TirePieChartCard(
+                        title = if (isTr) "Paket & Hasar Durumu" else "Condition & Packaging",
+                        subtitle = if (isTr) "Kutulu, sergilenen açık veya hasarlı modeller" else "Boxed, displayed loose, or damaged models",
+                        items = conditionCounts,
+                        totalCount = totalCount,
+                        isTr = isTr,
+                        onItemClick = { name ->
+                            selectCategory(
+                                if (isTr) "Paket & Hasar Durumu" else "Condition & Packaging",
+                                name,
+                                conditionCounts
+                            )
+                        }
+                    )
+                }
             }
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // 2. Araba Markası Dağılımı (Tire Pie Chart)
-        TirePieChartCard(
-            title = if (isTr) "Araba Markası Dağılımı" else "Car Brand Breakdown",
-            subtitle = if (isTr) "Porsche, Nissan, Ford, BMW gibi otomotiv markaları" else "Automotive brands like Porsche, Nissan, Ford, BMW",
-            items = carBrandCounts,
-            totalCount = totalCount,
-            isTr = isTr,
-            onItemClick = { name ->
-                selectCategory(
-                    if (isTr) "Araba Markası Dağılımı" else "Car Brand Breakdown",
-                    name,
-                    carBrandCounts
-                )
-            }
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // 3. Ölçek Dağılımı (Tire Pie Chart)
-        TirePieChartCard(
-            title = if (isTr) "Ölçek Dağılımı" else "Scale Breakdown",
-            subtitle = if (isTr) "1:64, 1:43, 1:24 ve 1:18 model boyut oranları" else "Model scale ratios (1:64, 1:43, 1:24, 1:18)",
-            items = scaleCounts,
-            totalCount = totalCount,
-            isTr = isTr,
-            onItemClick = { name ->
-                selectCategory(
-                    if (isTr) "Ölçek Dağılımı" else "Scale Breakdown",
-                    name,
-                    scaleCounts
-                )
-            }
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // 4. Paket & Hasar Durumu (Tire Pie Chart)
-        TirePieChartCard(
-            title = if (isTr) "Paket & Hasar Durumu" else "Condition & Packaging",
-            subtitle = if (isTr) "Kutulu, sergilenen açık veya hasarlı modeller" else "Boxed, displayed loose, or damaged models",
-            items = conditionCounts,
-            totalCount = totalCount,
-            isTr = isTr,
-            onItemClick = { name ->
-                selectCategory(
-                    if (isTr) "Paket & Hasar Durumu" else "Condition & Packaging",
-                    name,
-                    conditionCounts
-                )
-            }
-        )
+        }
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -733,6 +822,7 @@ fun StatsView(
         }
         
         Spacer(modifier = Modifier.height(32.dp))
+        }
     }
 
     selectedCategoryDetails?.let { details ->
@@ -1235,232 +1325,290 @@ fun CategoryModelsBottomSheet(
 ) {
     val totalEstimated = cars.sumOf { it.estimatedValue }
     val totalSpent = cars.sumOf { it.purchasePrice }
+    val configuration = LocalConfiguration.current
+    val isTablet = configuration.smallestScreenWidthDp >= 600
 
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.surface,
-        modifier = Modifier.testTag("category_models_bottom_sheet")
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 12.dp)
+    if (isTablet) {
+        Dialog(
+            onDismissRequest = onDismiss,
+            properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
-            // Header
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Surface(
+                shape = RoundedCornerShape(24.dp),
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 6.dp,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
+                modifier = Modifier
+                    .widthIn(min = 460.dp, max = 640.dp)
+                    .fillMaxWidth(0.85f)
+                    .padding(16.dp)
+                    .testTag("category_models_dialog")
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Surface(
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        shape = CircleShape,
-                        modifier = Modifier.size(40.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.Default.DirectionsCar,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    }
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Column {
-                        Text(
-                            text = categoryName,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Text(
-                            text = categoryTitle,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-
-                IconButton(onClick = onDismiss) {
-                    Icon(imageVector = Icons.Default.Close, contentDescription = if (isTr) "Kapat" else "Close")
-                }
+                CategoryModelsContent(
+                    categoryTitle = categoryTitle,
+                    categoryName = categoryName,
+                    cars = cars,
+                    currencyCode = currencyCode,
+                    isTr = isTr,
+                    totalEstimated = totalEstimated,
+                    totalSpent = totalSpent,
+                    onCarClick = onCarClick,
+                    onDismiss = onDismiss
+                )
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Summary Info Card inside bottom sheet
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(14.dp),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = if (isTr) "Model Sayısı" else "Total Models",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = "${cars.size}",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(
-                            text = if (isTr) "Tahmini Değer" else "Est. Value",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = "$currencyCode ${formatAmount(totalEstimated)}",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-
-                    if (totalSpent > 0) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Text(
-                                text = if (isTr) "Yatırım" else "Investment",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Text(
-                                text = "$currencyCode ${formatAmount(totalSpent)}",
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = if (isTr) "Koleksiyondaki Modeller" else "Models in Collection",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+        }
+    } else {
+        ModalBottomSheet(
+            onDismissRequest = onDismiss,
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            containerColor = MaterialTheme.colorScheme.surface,
+            modifier = Modifier.testTag("category_models_bottom_sheet")
+        ) {
+            CategoryModelsContent(
+                categoryTitle = categoryTitle,
+                categoryName = categoryName,
+                cars = cars,
+                currencyCode = currencyCode,
+                isTr = isTr,
+                totalEstimated = totalEstimated,
+                totalSpent = totalSpent,
+                onCarClick = onCarClick,
+                onDismiss = onDismiss
             )
+        }
+    }
+}
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            if (cars.isEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(120.dp),
-                    contentAlignment = Alignment.Center
+@Composable
+private fun CategoryModelsContent(
+    categoryTitle: String,
+    categoryName: String,
+    cars: List<DiecastCar>,
+    currencyCode: String,
+    isTr: Boolean,
+    totalEstimated: Double,
+    totalSpent: Double,
+    onCarClick: ((DiecastCar) -> Unit)?,
+    onDismiss: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 14.dp)
+    ) {
+        // Header
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Surface(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = CircleShape,
+                    modifier = Modifier.size(40.dp)
                 ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = Icons.Default.DirectionsCar,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.width(12.dp))
+                Column {
                     Text(
-                        text = if (isTr) "Bu kategoride model bulunamadı" else "No models found in this category",
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = categoryName,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = categoryTitle,
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-            } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(340.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(cars, key = { it.id }) { car ->
-                        Card(
+            }
+
+            IconButton(onClick = onDismiss) {
+                Icon(imageVector = Icons.Default.Close, contentDescription = if (isTr) "Kapat" else "Close")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Summary Info Card inside dialog / bottom sheet
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(14.dp),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = if (isTr) "Model Sayısı" else "Total Models",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "${cars.size}",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = if (isTr) "Tahmini Değer" else "Est. Value",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = "$currencyCode ${formatAmount(totalEstimated)}",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+
+                if (totalSpent > 0) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = if (isTr) "Yatırım" else "Investment",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = "$currencyCode ${formatAmount(totalSpent)}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = if (isTr) "Koleksiyondaki Modeller" else "Models in Collection",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        if (cars.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = if (isTr) "Bu kategoride model bulunamadı" else "No models found in this category",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(340.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(cars, key = { it.id }) { car ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onDismiss()
+                                onCarClick?.invoke(car)
+                            },
+                        shape = RoundedCornerShape(12.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+                    ) {
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable {
-                                    onDismiss()
-                                    onCarClick?.invoke(car)
-                                },
-                            shape = RoundedCornerShape(12.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+                                .padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Row(
+                            // Thumbnail or Icon
+                            Surface(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(12.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                    .size(52.dp)
+                                    .clip(RoundedCornerShape(8.dp)),
+                                color = MaterialTheme.colorScheme.surfaceVariant
                             ) {
-                                // Thumbnail or Icon
-                                Surface(
-                                    modifier = Modifier
-                                        .size(52.dp)
-                                        .clip(RoundedCornerShape(8.dp)),
-                                    color = MaterialTheme.colorScheme.surfaceVariant
-                                ) {
-                                    if (!car.photoPath.isNullOrBlank()) {
-                                        val context = androidx.compose.ui.platform.LocalContext.current
-                                        val imageModel = remember(car.photoPath) {
-                                            com.example.util.ImageStorageHelper.resolveImageModel(context, car.photoPath)
-                                        }
-                                        AsyncImage(
-                                            model = imageModel,
+                                if (!car.photoPath.isNullOrBlank()) {
+                                    val context = androidx.compose.ui.platform.LocalContext.current
+                                    val imageModel = remember(car.photoPath) {
+                                        com.example.util.ImageStorageHelper.resolveImageModel(context, car.photoPath)
+                                    }
+                                    AsyncImage(
+                                        model = imageModel,
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                } else {
+                                    Box(contentAlignment = Alignment.Center) {
+                                        Icon(
+                                            imageVector = Icons.Default.DirectionsCar,
                                             contentDescription = null,
-                                            contentScale = ContentScale.Crop,
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    } else {
-                                        Box(contentAlignment = Alignment.Center) {
-                                            Icon(
-                                                imageVector = Icons.Default.DirectionsCar,
-                                                contentDescription = null,
-                                                tint = MaterialTheme.colorScheme.primary,
-                                                modifier = Modifier.size(24.dp)
-                                            )
-                                        }
-                                    }
-                                }
-
-                                Spacer(modifier = Modifier.width(12.dp))
-
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = "${car.carBrand} ${car.model}",
-                                        style = MaterialTheme.typography.titleSmall,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                    Text(
-                                        text = "${car.manufacturer}${if (car.series.isNotBlank()) " • ${car.series}" else ""}${if (car.scale.isNotBlank()) " • ${car.scale}" else ""}",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
-                                    if (car.estimatedValue > 0) {
-                                        Spacer(modifier = Modifier.height(2.dp))
-                                        Text(
-                                            text = "$currencyCode ${formatAmount(car.estimatedValue)}",
-                                            style = MaterialTheme.typography.labelMedium,
-                                            fontWeight = FontWeight.Bold,
-                                            color = MaterialTheme.colorScheme.primary
+                                            tint = MaterialTheme.colorScheme.primary,
+                                            modifier = Modifier.size(24.dp)
                                         )
                                     }
                                 }
-
-                                Icon(
-                                    imageVector = Icons.Default.ChevronRight,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
                             }
+
+                            Spacer(modifier = Modifier.width(12.dp))
+
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "${car.carBrand} ${car.model}",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = "${car.manufacturer}${if (car.series.isNotBlank()) " • ${car.series}" else ""}${if (car.scale.isNotBlank()) " • ${car.scale}" else ""}",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                if (car.estimatedValue > 0) {
+                                    Spacer(modifier = Modifier.height(2.dp))
+                                    Text(
+                                        text = "$currencyCode ${formatAmount(car.estimatedValue)}",
+                                        style = MaterialTheme.typography.labelMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            }
+
+                            Icon(
+                                imageVector = Icons.Default.ChevronRight,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         }
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 

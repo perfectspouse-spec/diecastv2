@@ -56,6 +56,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -429,10 +430,9 @@ fun HomeScreen(
             val isCompactHeight = maxHeight < 500.dp
 
             // Tablet çift panel (split-pane) durumu:
-            // - Yatay modda (Landscape): İstatistik sekmesi değilse ekran daima iki panele bölünür (%40 liste / %60 detay veya boş rehber paneli).
-            // - Dikey modda (Portrait): İstatistik sekmesi değilse ve bir araba seçilmişse çift panel moduna geçer (%42 liste / %58 detay).
-            //   Araba seçilmemişse liste %100 genişlikte ferahça akar; ekran gereksiz yere ikiye bölünmez.
-            val isTabletSplitPane = isTablet && (selectedTab != CollectionTab.STATS) && (localIsLandscape || selectedCarForDetail != null)
+            // Tablet ekranlarında (>768px, >1024px hem dikey hem yatay) koleksiyon ve istek listesi sekmelerinde
+            // daima sol tarafta liste/seçimler, sağ tarafta detay içeriği olan iki sütunlu (Master-Detail) yapı kullanılır.
+            val isTabletSplitPane = isTablet && (selectedTab != CollectionTab.STATS)
 
             // Esnek weight oranları (Kesinlikle sabit piksel/dp genişlik kullanılmaz, ekrana göre dinamik esner):
             val listPaneWeight = when {
@@ -452,9 +452,47 @@ fun HomeScreen(
                     NavigationRail(
                         containerColor = MaterialTheme.colorScheme.surface,
                         contentColor = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.fillMaxHeight()
+                        modifier = Modifier.fillMaxHeight(),
+                        header = {
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                                modifier = Modifier.size(44.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        imageVector = Icons.Default.DirectionsCar,
+                                        contentDescription = "Diecast Collection",
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(14.dp))
+                            FloatingActionButton(
+                                onClick = {
+                                    viewModel.openAddCarDialog(isWishlist = (selectedTab == CollectionTab.WISHLIST))
+                                },
+                                shape = RoundedCornerShape(14.dp),
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary,
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .testTag("rail_fab_add_car")
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = if (selectedTab == CollectionTab.WISHLIST) {
+                                        if (isTr) "İstek Ekle" else "Add Wishlist"
+                                    } else {
+                                        if (isTr) "Model Ekle" else "Add Model"
+                                    }
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(14.dp))
+                        }
                     ) {
-                        Spacer(modifier = Modifier.height(12.dp))
                         CollectionTab.values().forEach { tab ->
                             val icon = when (tab) {
                                 CollectionTab.COLLECTION -> Icons.Default.Inventory2
@@ -485,6 +523,32 @@ fun HomeScreen(
                                 modifier = Modifier.testTag("rail_${tab.name.lowercase()}")
                             )
                         }
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        NavigationRailItem(
+                            selected = showSettingsDialog,
+                            onClick = { viewModel.openSettings() },
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Default.Settings,
+                                    contentDescription = if (isTr) "Ayarlar" else "Settings"
+                                )
+                            },
+                            label = {
+                                Text(
+                                    text = if (isTr) "Ayarlar" else "Settings",
+                                    fontSize = 10.sp
+                                )
+                            },
+                            colors = NavigationRailItemDefaults.colors(
+                                selectedIconColor = MaterialTheme.colorScheme.primary,
+                                selectedTextColor = MaterialTheme.colorScheme.primary,
+                                indicatorColor = MaterialTheme.colorScheme.primaryContainer
+                            ),
+                            modifier = Modifier.testTag("rail_settings")
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
 
@@ -743,7 +807,7 @@ fun HomeScreen(
                                 .fillMaxHeight()
                                 .padding(start = 8.dp, end = 16.dp, top = 8.dp, bottom = 16.dp)
                         )
-                    } else if (localIsLandscape && selectedTab != CollectionTab.STATS) {
+                    } else {
                         TabletCarDetailEmptyPane(
                             isTr = isTr,
                             modifier = Modifier

@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -162,6 +163,8 @@ fun ManufacturerPriceSyncDialog(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .widthIn(max = 680.dp)
+                .align(Alignment.CenterHorizontally)
                 .padding(horizontal = 20.dp, vertical = 16.dp)
         ) {
             // Header

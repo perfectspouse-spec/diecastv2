@@ -2010,7 +2010,7 @@ fun AddEditCarDialog(
 ) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
-    val widthFraction = if (isLandscape) 0.72f else 0.88f
+    val widthFraction = if (isLandscape) 0.65f else 0.85f
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -2018,6 +2018,7 @@ fun AddEditCarDialog(
     ) {
         Surface(
             modifier = Modifier
+                .widthIn(min = 460.dp, max = 760.dp)
                 .fillMaxWidth(widthFraction)
                 .fillMaxHeight(0.92f),
             shape = RoundedCornerShape(24.dp),

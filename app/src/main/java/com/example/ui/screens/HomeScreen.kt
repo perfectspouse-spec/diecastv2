@@ -88,6 +88,11 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationRailItemDefaults
+import androidx.compose.material3.PermanentDrawerSheet
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -230,7 +235,7 @@ fun HomeScreen(
     val wishlistCount = allCars.count { it.isWishlist }
 
     val pageSize = 20
-    var currentPage by remember { mutableIntStateOf(1) }
+    var currentPage by rememberSaveable { mutableIntStateOf(1) }
 
     val totalItems = filteredCars.size
     val totalPages = if (totalItems <= 0) {
@@ -270,12 +275,16 @@ fun HomeScreen(
     // Tablet tespiti: Android sw600dp standardı veya geniş pencere boyutu
     val isTablet = (configuration.smallestScreenWidthDp >= 600) ||
                    (windowWidthType == WindowWidthType.EXPANDED) ||
+                   (configuration.screenWidthDp >= 768) ||
                    (windowSizeClass?.widthSizeClass != WindowWidthSizeClass.Compact && windowSizeClass?.heightSizeClass != WindowHeightSizeClass.Compact)
 
-    // Menü konumu: Tablet cihazlarda her zaman (dikey ve yatay) sol tarafta dikey Navigation Rail.
-    // Telefonlarda ise dikeyde alt Bottom Navigation, yatayda sol dikey bar.
-    val showNavigationRail = isTablet || (isLandscape && configuration.screenWidthDp >= 600)
-    val showBottomBar = !showNavigationRail
+    // Google Play Large Screen App Quality Spec:
+    // 1. Compact (< 600dp): Ekranın altında NavigationBar (Bottom Navigation)
+    // 2. Medium (600dp - 839dp): Sol tarafa yerleşen NavigationRail (dikey ince bar)
+    // 3. Expanded (≥ 840dp): Sol tarafta açık kalan kalıcı NavigationDrawer (Geniş menü)
+    val isExpandedNav = (windowWidthType == WindowWidthType.EXPANDED) || (configuration.screenWidthDp >= 840)
+    val isMediumNav = !isExpandedNav && ((windowWidthType == WindowWidthType.MEDIUM) || (configuration.screenWidthDp >= 600) || isTablet || (isLandscape && configuration.screenWidthDp >= 540))
+    val showBottomBar = !isExpandedNav && !isMediumNav
 
     // Tablet modunda bir araç detayı açıkken Android geri tuşu/hareketi ile detayı kapatıp listeye dönme
     BackHandler(enabled = isTablet && selectedCarForDetail != null) {
@@ -412,7 +421,9 @@ fun HomeScreen(
                                 selectedTextColor = MaterialTheme.colorScheme.primary,
                                 indicatorColor = MaterialTheme.colorScheme.primaryContainer
                             ),
-                            modifier = Modifier.testTag("bottom_nav_${tab.name.lowercase()}")
+                            modifier = Modifier
+                                .pointerHoverIcon(PointerIcon.Hand)
+                                .testTag("bottom_nav_${tab.name.lowercase()}")
                         )
                     }
                 }
@@ -432,23 +443,194 @@ fun HomeScreen(
             // Tablet çift panel (split-pane) durumu:
             // Tablet ekranlarında (>768px, >1024px hem dikey hem yatay) koleksiyon ve istek listesi sekmelerinde
             // daima sol tarafta liste/seçimler, sağ tarafta detay içeriği olan iki sütunlu (Master-Detail) yapı kullanılır.
-            val isTabletSplitPane = isTablet && (selectedTab != CollectionTab.STATS)
+            val isTabletSplitPane = (isTablet || maxWidth >= 720.dp) && (selectedTab != CollectionTab.STATS)
 
             // Esnek weight oranları (Kesinlikle sabit piksel/dp genişlik kullanılmaz, ekrana göre dinamik esner):
             val listPaneWeight = when {
                 !isTabletSplitPane -> 1.0f
-                localIsLandscape -> 0.40f // Yatay tablet modunda sol panel %40
-                else -> 0.42f            // Dikey tablet modunda sol panel %42
+                maxWidth >= 1000.dp -> 0.38f // Geniş ekranlarda sol panel %38
+                localIsLandscape -> 0.40f   // Yatay tablet modunda sol panel %40
+                else -> 0.42f              // Dikey tablet modunda sol panel %42
             }
             val detailPaneWeight = when {
                 !isTabletSplitPane -> 0.0f
-                localIsLandscape -> 0.60f // Yatay tablet modunda sağ panel %60
-                else -> 0.58f            // Dikey tablet modunda sağ panel %58
+                maxWidth >= 1000.dp -> 0.62f // Geniş ekranlarda sağ panel %62
+                localIsLandscape -> 0.60f   // Yatay tablet modunda sağ panel %60
+                else -> 0.58f              // Dikey tablet modunda sağ panel %58
             }
 
             Row(modifier = Modifier.fillMaxSize()) {
-                // Tablet modunda ekranın sol tarafına taşınan Navigation Rail
-                if (showNavigationRail) {
+                // Large Screen Navigation Architecture (Google Play Large Screen App Quality Tier 1/2 Spec):
+                // 1. Expanded (≥ 840dp): Permanent Navigation Drawer (Geniş yan menü, açık kalır)
+                // 2. Medium (600dp - 839dp): Navigation Rail (Dikey ince bar)
+                // 3. Compact (< 600dp): Bottom Navigation Bar
+                if (isExpandedNav) {
+                    PermanentDrawerSheet(
+                        modifier = Modifier
+                            .width(240.dp)
+                            .fillMaxHeight(),
+                        drawerContainerColor = MaterialTheme.colorScheme.surface,
+                        drawerContentColor = MaterialTheme.colorScheme.onSurface
+                    ) {
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // App Branding Header
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 18.dp, vertical = 6.dp)
+                        ) {
+                            Surface(
+                                shape = RoundedCornerShape(12.dp),
+                                color = MaterialTheme.colorScheme.primaryContainer,
+                                modifier = Modifier.size(42.dp)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        imageVector = Icons.Default.DirectionsCar,
+                                        contentDescription = "Diecast Collection",
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Column {
+                                Text(
+                                    text = "Diecast Collection",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Text(
+                                    text = if (isTr) "Model Kataloğu" else "Diecast Catalog",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Quick Add Extended Button
+                        Button(
+                            onClick = {
+                                viewModel.openAddCarDialog(isWishlist = (selectedTab == CollectionTab.WISHLIST))
+                            },
+                            shape = RoundedCornerShape(14.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                                contentColor = MaterialTheme.colorScheme.onPrimary
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 14.dp)
+                                .height(48.dp)
+                                .pointerHoverIcon(PointerIcon.Hand)
+                                .testTag("drawer_btn_add_car")
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = if (selectedTab == CollectionTab.WISHLIST) {
+                                    if (isTr) "İstek Listesine Ekle" else "Add to Wishlist"
+                                } else {
+                                    if (isTr) "Yeni Model Ekle" else "Add New Model"
+                                },
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 13.sp
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Navigation Items
+                        CollectionTab.values().forEach { tab ->
+                            val icon = when (tab) {
+                                CollectionTab.COLLECTION -> Icons.Default.Inventory2
+                                CollectionTab.WISHLIST -> Icons.Default.Favorite
+                                CollectionTab.STATS -> Icons.Default.PieChart
+                            }
+                            val count = when (tab) {
+                                CollectionTab.COLLECTION -> collectionCount
+                                CollectionTab.WISHLIST -> wishlistCount
+                                CollectionTab.STATS -> null
+                            }
+                            NavigationDrawerItem(
+                                label = {
+                                    Text(
+                                        text = tab.label,
+                                        fontWeight = if (selectedTab == tab) FontWeight.Bold else FontWeight.Medium
+                                    )
+                                },
+                                selected = selectedTab == tab,
+                                onClick = { viewModel.selectedTab.value = tab },
+                                icon = {
+                                    Icon(
+                                        imageVector = icon,
+                                        contentDescription = tab.label
+                                    )
+                                },
+                                badge = count?.let {
+                                    {
+                                        Surface(
+                                            shape = RoundedCornerShape(50),
+                                            color = if (selectedTab == tab) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                                            modifier = Modifier.padding(horizontal = 4.dp)
+                                        ) {
+                                            Text(
+                                                text = "$it",
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = if (selectedTab == tab) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        }
+                                    }
+                                },
+                                modifier = Modifier
+                                    .padding(horizontal = 12.dp, vertical = 4.dp)
+                                    .pointerHoverIcon(PointerIcon.Hand)
+                                    .testTag("drawer_${tab.name.lowercase()}"),
+                                colors = NavigationDrawerItemDefaults.colors(
+                                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                    selectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    selectedIconColor = MaterialTheme.colorScheme.primary
+                                )
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        // Settings Item
+                        NavigationDrawerItem(
+                            label = {
+                                Text(if (isTr) "Ayarlar" else "Settings")
+                            },
+                            selected = showSettingsDialog,
+                            onClick = { viewModel.openSettings() },
+                            icon = {
+                                Icon(
+                                    imageVector = Icons.Default.Settings,
+                                    contentDescription = if (isTr) "Ayarlar" else "Settings"
+                                )
+                            },
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                                .pointerHoverIcon(PointerIcon.Hand)
+                                .testTag("drawer_settings"),
+                            colors = NavigationDrawerItemDefaults.colors(
+                                selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                                selectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                selectedIconColor = MaterialTheme.colorScheme.primary
+                            )
+                        )
+                        Spacer(modifier = Modifier.height(14.dp))
+                    }
+                } else if (isMediumNav) {
                     NavigationRail(
                         containerColor = MaterialTheme.colorScheme.surface,
                         contentColor = MaterialTheme.colorScheme.onSurface,
@@ -479,6 +661,7 @@ fun HomeScreen(
                                 contentColor = MaterialTheme.colorScheme.onPrimary,
                                 modifier = Modifier
                                     .size(48.dp)
+                                    .pointerHoverIcon(PointerIcon.Hand)
                                     .testTag("rail_fab_add_car")
                             ) {
                                 Icon(
@@ -520,7 +703,9 @@ fun HomeScreen(
                                     selectedTextColor = MaterialTheme.colorScheme.primary,
                                     indicatorColor = MaterialTheme.colorScheme.primaryContainer
                                 ),
-                                modifier = Modifier.testTag("rail_${tab.name.lowercase()}")
+                                modifier = Modifier
+                                    .pointerHoverIcon(PointerIcon.Hand)
+                                    .testTag("rail_${tab.name.lowercase()}")
                             )
                         }
 
@@ -546,7 +731,9 @@ fun HomeScreen(
                                 selectedTextColor = MaterialTheme.colorScheme.primary,
                                 indicatorColor = MaterialTheme.colorScheme.primaryContainer
                             ),
-                            modifier = Modifier.testTag("rail_settings")
+                            modifier = Modifier
+                                .pointerHoverIcon(PointerIcon.Hand)
+                                .testTag("rail_settings")
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                     }

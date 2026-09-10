@@ -61,6 +61,8 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
@@ -171,6 +173,7 @@ fun DiecastGridCard(
                 indication = androidx.compose.material3.ripple(),
                 onClick = onClick
             )
+            .pointerHoverIcon(PointerIcon.Hand)
             .testTag("diecast_card_grid_${car.id}"),
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(
@@ -247,6 +250,7 @@ fun DiecastGridCard(
                         .align(Alignment.TopEnd)
                         .padding(6.dp)
                         .size(34.dp)
+                        .pointerHoverIcon(PointerIcon.Hand)
                         .graphicsLayer {
                             scaleX = favScale
                             scaleY = favScale
@@ -516,6 +520,7 @@ fun DiecastListCard(
                 indication = androidx.compose.material3.ripple(),
                 onClick = onClick
             )
+            .pointerHoverIcon(PointerIcon.Hand)
             .testTag("diecast_card_list_${car.id}"),
         shape = RoundedCornerShape(16.dp),
         border = BorderStroke(
@@ -789,6 +794,7 @@ fun DiecastListCard(
                 interactionSource = favInteractionSource,
                 modifier = Modifier
                     .size(38.dp)
+                    .pointerHoverIcon(PointerIcon.Hand)
                     .graphicsLayer {
                         scaleX = favScale
                         scaleY = favScale

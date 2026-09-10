@@ -48,6 +48,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -83,6 +89,7 @@ fun FilterBar(
     modifier: Modifier = Modifier
 ) {
     val isTr = isTurkishLocale()
+    val focusManager = LocalFocusManager.current
     var showSortMenu by remember { mutableStateOf(false) }
 
     Column(
@@ -104,11 +111,17 @@ fun FilterBar(
                 },
                 trailingIcon = {
                     if (filterState.searchQuery.isNotEmpty()) {
-                        IconButton(onClick = { onSearchQueryChange("") }) {
+                        IconButton(
+                            onClick = { onSearchQueryChange("") },
+                            modifier = Modifier.pointerHoverIcon(PointerIcon.Hand)
+                        ) {
                             Icon(imageVector = Icons.Default.Clear, contentDescription = if (isTr) "Temizle" else "Clear")
                         }
                     } else {
-                        IconButton(onClick = onOpenScanner) {
+                        IconButton(
+                            onClick = onOpenScanner,
+                            modifier = Modifier.pointerHoverIcon(PointerIcon.Hand)
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.QrCodeScanner,
                                 contentDescription = if (isTr) "Barkod Taraması" else "Barcode Scan",
@@ -117,6 +130,8 @@ fun FilterBar(
                         }
                     }
                 },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
                 singleLine = true,
                 maxLines = 1,
                 shape = RoundedCornerShape(16.dp),
@@ -141,7 +156,9 @@ fun FilterBar(
                 Row {
                     IconButton(
                         onClick = { showSortMenu = true },
-                        modifier = Modifier.testTag("btn_sort_menu")
+                        modifier = Modifier
+                            .pointerHoverIcon(PointerIcon.Hand)
+                            .testTag("btn_sort_menu")
                     ) {
                         Icon(
                             imageVector = Icons.Default.Sort,
@@ -152,7 +169,9 @@ fun FilterBar(
 
                     IconButton(
                         onClick = onToggleViewMode,
-                        modifier = Modifier.testTag("btn_toggle_view")
+                        modifier = Modifier
+                            .pointerHoverIcon(PointerIcon.Hand)
+                            .testTag("btn_toggle_view")
                     ) {
                         Icon(
                             imageVector = if (isGridView) Icons.Default.ViewList else Icons.Default.GridView,

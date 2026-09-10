@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -98,10 +99,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -902,6 +906,7 @@ fun AddEditCarFormContent(
                     placeholder = { Text(if (isTr) "ör. Hot Wheels, Matchbox, Mini GT" else "e.g. Hot Wheels, Matchbox, Mini GT") },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = manufacturerExpanded) },
                     colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     modifier = Modifier
                         .fillMaxWidth()
                         .menuAnchor()
@@ -955,6 +960,7 @@ fun AddEditCarFormContent(
                         supportingText = brandError?.let { err -> { Text(err, color = MaterialTheme.colorScheme.error) } },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = brandExpanded) },
                         colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                         modifier = Modifier
                             .fillMaxWidth()
                             .menuAnchor()
@@ -994,6 +1000,7 @@ fun AddEditCarFormContent(
                     placeholder = { Text(if (isTr) "ör. 911 GT3 RS" else "e.g. 911 GT3 RS") },
                     isError = modelError != null,
                     supportingText = modelError?.let { err -> { Text(err, color = MaterialTheme.colorScheme.error) } },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                     modifier = Modifier
                         .weight(1f)
                         .testTag("input_model_name"),
@@ -1013,7 +1020,7 @@ fun AddEditCarFormContent(
                     onValueChange = { modelYear = it },
                     label = { Text(if (isTr) "Model Yılı" else "Model Year") },
                     placeholder = { Text(if (isTr) "ör. 2023" else "e.g. 2023") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                     modifier = Modifier
                         .weight(1f)
                         .testTag("input_model_year"),
@@ -1025,7 +1032,7 @@ fun AddEditCarFormContent(
                     onValueChange = { productionYear = it },
                     label = { Text(if (isTr) "Üretim Yılı" else "Release Year") },
                     placeholder = { Text(if (isTr) "ör. 2024" else "e.g. 2024") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                     modifier = Modifier
                         .weight(1f)
                         .testTag("input_production_year"),
@@ -1262,7 +1269,7 @@ fun AddEditCarFormContent(
                     },
                     prefix = { Text("$currencyCode ", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary, fontSize = 13.sp) },
                     placeholder = { Text("0.00") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next),
                     modifier = Modifier
                         .weight(1f)
                         .testTag("input_purchase_price"),
@@ -1290,7 +1297,10 @@ fun AddEditCarFormContent(
                                     com.example.util.formatAmount(autoEstimateResult.estimatedValue)
                                 }
                             },
-                            modifier = Modifier.size(28.dp).testTag("btn_auto_fill_mfg_price")
+                            modifier = Modifier
+                                .size(28.dp)
+                                .pointerHoverIcon(PointerIcon.Hand)
+                                .testTag("btn_auto_fill_mfg_price")
                         ) {
                             Icon(
                                 imageVector = Icons.Default.AutoAwesome,
@@ -1310,7 +1320,7 @@ fun AddEditCarFormContent(
                             overflow = TextOverflow.Ellipsis
                         )
                     },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next),
                     modifier = Modifier
                         .weight(1f)
                         .testTag("input_estimated_value"),
@@ -1637,6 +1647,18 @@ fun AddEditCarFormContent(
                             label = { Text(if (isTr) "Özel Etiket Yazın" else "Type Custom Tag") },
                             placeholder = { Text(if (isTr) "ör. Chase, Kırmızı Çizgi, Nadir..." else "e.g. Chase, Redline, Rare...") },
                             singleLine = true,
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                            keyboardActions = KeyboardActions(
+                                onDone = {
+                                    val trimmed = customTagInput.trim()
+                                    if (trimmed.isNotBlank()) {
+                                        if (!tagsList.any { it.equals(trimmed, ignoreCase = true) }) {
+                                            tagsList = tagsList + trimmed
+                                        }
+                                        customTagInput = ""
+                                    }
+                                }
+                            ),
                             modifier = Modifier
                                 .weight(1f)
                                 .testTag("input_custom_tag"),
@@ -1659,7 +1681,10 @@ fun AddEditCarFormContent(
                             },
                             enabled = customTagInput.isNotBlank(),
                             shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.height(52.dp).testTag("btn_add_custom_tag")
+                            modifier = Modifier
+                                .height(52.dp)
+                                .pointerHoverIcon(PointerIcon.Hand)
+                                .testTag("btn_add_custom_tag")
                         ) {
                             Icon(imageVector = Icons.Default.Add, contentDescription = null)
                             Spacer(modifier = Modifier.width(4.dp))
@@ -1790,6 +1815,7 @@ fun AddEditCarFormContent(
                     modifier = Modifier
                         .weight(1f)
                         .height(52.dp)
+                        .pointerHoverIcon(PointerIcon.Hand)
                         .testTag("btn_cancel_add_car"),
                     shape = RoundedCornerShape(12.dp)
                 ) {
@@ -1860,6 +1886,7 @@ fun AddEditCarFormContent(
                     modifier = Modifier
                         .weight(1.5f)
                         .height(52.dp)
+                        .pointerHoverIcon(PointerIcon.Hand)
                         .testTag("btn_save_car"),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)

@@ -18,8 +18,8 @@ android {
     applicationId = "com.aistudio.diecastcollection.m8x2k4"
     minSdk = 24
     targetSdk = 36
-    versionCode = 27
-    versionName = "27.0"
+    versionCode = 28
+    versionName = "28.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -96,6 +96,7 @@ dependencies {
   implementation(libs.androidx.compose.material.icons.extended)
   implementation(libs.androidx.compose.material3)
   implementation(libs.androidx.compose.material3.windowsizeclass)
+  implementation(libs.androidx.window)
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.ui.graphics)
   implementation(libs.androidx.compose.ui.tooling.preview)

@@ -18,8 +18,8 @@ android {
     applicationId = "com.aistudio.diecastcollection.m8x2k4"
     minSdk = 24
     targetSdk = 36
-    versionCode = 29
-    versionName = "29.0"
+    versionCode = 31
+    versionName = "31.0"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }

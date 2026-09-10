@@ -81,15 +81,17 @@ class DiecastViewModel(application: Application) : AndroidViewModel(application)
         val dao = AppDatabase.getDatabase(application).diecastDao()
         repository = DiecastRepository(dao)
 
-        val savedLang = application
-            .getSharedPreferences("app_settings", android.content.Context.MODE_PRIVATE)
-            .getString("app_language", "EN") ?: "EN"
+        val prefs = application.getSharedPreferences("app_settings", android.content.Context.MODE_PRIVATE)
+        val savedLang = prefs.getString("app_language", "EN") ?: "EN"
         com.example.util.LocaleHelper.setLanguage(savedLang)
 
-        // Seed 30 realistic sample diecast cars if database is empty
+        // Seed 30 realistic sample diecast cars with authentic images if empty or upgrading to v2
+        val sampleDataVersion = prefs.getInt("sample_data_version", 0)
         viewModelScope.launch {
-            if (repository.getCarCount() == 0) {
+            if (repository.getCarCount() == 0 || sampleDataVersion < 2) {
+                repository.deleteAllCars()
                 repository.insertCars(com.example.data.SampleDiecastData.getSampleCars())
+                prefs.edit().putInt("sample_data_version", 2).apply()
             }
         }
     }
@@ -617,6 +619,8 @@ class DiecastViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             repository.deleteAllCars()
             repository.insertCars(com.example.data.SampleDiecastData.getSampleCars())
+            val prefs = getApplication<Application>().getSharedPreferences("app_settings", android.content.Context.MODE_PRIVATE)
+            prefs.edit().putInt("sample_data_version", 2).apply()
             selectedCarForDetail.value = null
             carToEdit.value = null
         }
